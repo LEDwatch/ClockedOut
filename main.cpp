@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 
-	float centerX, centerY, radius, totalAngle;
+	float centerX, centerY, radius, totalAngle, angleOffset;
 	int partCount;
 
 	std::cout << "CenterX: ";
@@ -44,6 +44,10 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "\r\nTotal angle (degrees): ";
 	std::cin >> totalAngle;
+
+	std::cout << "Angle offset (degrees): ";
+	std::cin >> angleOffset;
+	angleOffset *= PI / 180.;
 
 	std::cout << std::endl;
 
@@ -83,7 +87,7 @@ int main(int argc, char* argv[]) {
 	int modStart = 0, modEnd = 0;
 
 	for(int i = 0; i < partCount; i++) {
-		double angle = (double) PI * totalAngle * i / 180. / partCount;
+		double angle = (double) PI * totalAngle * i / 180. / partCount + angleOffset;
 		
 		double x = centerX + radius*std::cos(angle);
 		double y = centerY + radius*std::sin(angle);
