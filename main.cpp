@@ -15,6 +15,8 @@ void transformPoint(std::string& pcb, std::string& module, size_t pcbPos,
 
 int findNextPoint(std::string& str, int startPos);
 
+int findNextPad(std::string& str, int startPos);
+
 void findNextModule(std::string& str, std::string& modName, int searchPos, int& startPos, int& endPos);
 
 std::string getModuleName(std::string& module);
@@ -118,6 +120,45 @@ void transformModule(std::string& pcb, std::string& module,
 		//modPos++;
 		//pcbPos++;
 	//}
+	while(1) {
+		pcbPos = findNextPad(pcb, pcbPos);
+
+		if(pcbPos >= modEnd)
+			break;
+
+		int padPos = pcb.find("at ", pcbPos);
+		int pcbStartPos, pcbEndPos;
+
+		std::stringstream ssPcb(pcb);
+		std::string junk;
+		ssPcb.seekg(padPos);
+
+		ssPcb >> junk; //(at
+		//pcbStartPos = ssPcb.tellg();
+		ssPcb >> junk; //x-coord
+		ssPcb >> junk; //y-coord
+		pcbStartPos = ssPcb.tellg();
+		ssPcb >> junk; //rotation
+
+		//if(junk[junk.length() - 1] != ')')
+			//ssPcb >> junk;
+		pcbEndPos = ssPcb.tellg();
+
+		//newX = x*cosx - y*sinx + centerX;
+		//newY = y*cosx + x*sinx + centerY;
+		//newX = centerX + radius*std::cos(angle);
+		//newY = centerY + radius*std::sin(angle);
+
+		std::string tail = "";
+		if(junk[junk.length() - 1] == ')')
+			tail = ")";
+
+		pcb = pcb.substr(0, pcbStartPos) + " " +
+			std::to_string(360. - angle * 180. / PI) + tail +
+			pcb.substr(pcbEndPos, pcb.length() - 1);
+
+		pcbPos++;
+	}
 }
 
 
@@ -219,4 +260,15 @@ int findNextPoint(std::string& str, int startPos) {
 		endPos = str.length();
 	
 	return std::min(atPos, std::min(stPos, endPos));
+}
+
+int findNextPad(std::string& str, int startPos) {
+	size_t padPos;
+
+	padPos = str.find("pad ", startPos);
+
+	if(padPos == std::string::npos)
+		padPos = str.length();
+	
+	return padPos;
 }
