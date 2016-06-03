@@ -200,7 +200,7 @@ void transformPoint(std::string& pcb, std::string& module, size_t pcbPos, size_t
 		pcb = pcb.substr(0, pcbStartPos) + " " +
 			std::to_string(newX) + " " +
 			std::to_string(newY) + " " + 
-			std::to_string(angle * 180. / PI) + tail +
+			std::to_string(360. - angle * 180. / PI) + tail +
 			pcb.substr(pcbEndPos, pcb.length() - 1);
 }
 
