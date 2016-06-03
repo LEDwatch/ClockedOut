@@ -8,10 +8,10 @@
 #define PI 3.141592654
 
 void transformModule(std::string& pcb, std::string& module,
-	int modStart, int modEnd, float centerX, float centerY, float angle, float radius);
+	int modStart, int modEnd, float centerX, float centerY, float angle, float angleOffset, float radius);
 
 void transformPoint(std::string& pcb, std::string& module, size_t pcbPos,
-	size_t modPos, float centerX, float centerY, float angle, float radius);
+	size_t modPos, float centerX, float centerY, float angle, float angleOffset, float radius);
 
 int findNextPoint(std::string& str, int startPos);
 
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 	int modStart = 0, modEnd = 0;
 
 	for(int i = 0; i < partCount; i++) {
-		double angle = (double) PI * totalAngle * i / 180. / partCount + angleOffset;
+		double angle = (double) PI * totalAngle * i / 180. / partCount;
 		
 		double x = centerX + radius*std::cos(angle);
 		double y = centerY + radius*std::sin(angle);
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
 		std::cout << "Found module " << i+1 << " between (" << modStart <<
 			", " << modEnd << ")" << std::endl;
 
-		transformModule(pcb, module, modStart, modEnd, x, y, angle, radius);
+		transformModule(pcb, module, modStart, modEnd, x, y, angle, angleOffset, radius);
 
 	}
 
@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 void transformModule(std::string& pcb, std::string& module,
-	int modStart, int modEnd, float centerX, float centerY, float angle, float radius) {
+	int modStart, int modEnd, float centerX, float centerY, float angle, float angleOffset, float radius) {
 	
 	int modPos = 0, pcbPos = modStart;
 
@@ -119,7 +119,7 @@ void transformModule(std::string& pcb, std::string& module,
 		//if(modPos >= module.length() || pcbPos >= modEnd)
 			//break;
 
-		transformPoint(pcb, module, pcbPos, modPos, centerX, centerY, angle, radius);
+		transformPoint(pcb, module, pcbPos, modPos, centerX, centerY, angle, angleOffset, radius);
 
 		//modPos++;
 		//pcbPos++;
@@ -158,7 +158,7 @@ void transformModule(std::string& pcb, std::string& module,
 			tail = ")";
 
 		pcb = pcb.substr(0, pcbStartPos) + " " +
-			std::to_string(360. - angle * 180. / PI) + tail +
+			std::to_string((angleOffset - angle)* 180. / PI) + tail +
 			pcb.substr(pcbEndPos, pcb.length() - 1);
 
 		pcbPos++;
@@ -205,7 +205,7 @@ std::string getModuleName(std::string& module) {
 
 
 void transformPoint(std::string& pcb, std::string& module, size_t pcbPos, size_t modPos,
-	float centerX, float centerY, float angle, float radius) {
+	float centerX, float centerY, float angle, float angleOffset, float radius) {
 	std::stringstream ssPcb(pcb), ssMod(module);
 
 	double cosx = std::cos(angle), sinx = std::sin(angle);
@@ -245,7 +245,7 @@ void transformPoint(std::string& pcb, std::string& module, size_t pcbPos, size_t
 		pcb = pcb.substr(0, pcbStartPos) + " " +
 			std::to_string(newX) + " " +
 			std::to_string(newY) + " " + 
-			std::to_string(360. - angle * 180. / PI) + tail +
+			std::to_string((angleOffset - angle) * 180. / PI) + tail +
 			pcb.substr(pcbEndPos, pcb.length() - 1);
 }
 
