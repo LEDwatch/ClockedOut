@@ -185,9 +185,13 @@ void transformPoint(std::string& pcb, std::string& module, size_t pcbPos, size_t
 		newX = x*cosx - y*sinx + centerX;
 		newY = y*cosx + x*sinx + centerY;
 
+		std::string tail = "";
+		if(junk[junk.length() - 1] == ')')
+			tail = ")";
+
 		pcb = pcb.substr(0, pcbStartPos) + " " +
 			std::to_string(newX) + " " +
-			std::to_string(newY) +
+			std::to_string(newY) + tail +
 			pcb.substr(pcbEndPos, pcb.length() - 1);
 }
 
