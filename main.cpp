@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 	std::cout << "\r\nTotal angle (degrees): ";
 	std::cin >> totalAngle;
 
-	std::cout << "Angle offset (degrees): ";
+	std::cout << "Footprint Rotation offset (degrees): ";
 	std::cin >> angleOffset;
 	angleOffset *= PI / 180.;
 
@@ -96,6 +96,9 @@ int main(int argc, char* argv[]) {
 
 		std::cout << "Found module " << i+1 << " between (" << modStart <<
 			", " << modEnd << ")" << std::endl;
+		std::cout << "Angle : " << angle << std::endl;
+		std::cout << "X : " << x << std::endl;
+		std::cout << "Y : " << y << std::endl;
 
 		transformModule(pcb, module, modStart, modEnd, x, y, angle, angleOffset, radius);
 
