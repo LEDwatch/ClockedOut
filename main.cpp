@@ -194,9 +194,9 @@ void transformPoint(std::string& pcb, std::string& module, size_t pcbPos, size_t
 int findNextPoint(std::string& str, int startPos) {
 	size_t atPos, stPos, endPos;
 
-	atPos = str.find("at", startPos);
-	stPos = str.find("start", startPos);
-	endPos = str.find("end", startPos);
+	atPos = str.find("at ", startPos);
+	stPos = str.find("start ", startPos);
+	endPos = str.find("end ", startPos);
 
 	if(atPos == std::string::npos)
 		atPos = str.length();
