@@ -97,10 +97,10 @@ int main(int argc, char* argv[]) {
 		std::cout << "Found module " << i+1 << " between (" << modStart <<
 			", " << modEnd << ")" << std::endl;
 		std::cout << "Angle : " << angle << std::endl;
-		std::cout << "X : " << x << std::endl;
-		std::cout << "Y : " << y << std::endl;
+		//std::cout << "X : " << x << std::endl;
+		//std::cout << "Y : " << y << std::endl;
 
-		transformModule(pcb, module, modStart, modEnd, x, y, angle, angleOffset, radius);
+		transformModule(pcb, module, modStart, modEnd, centerX, centerY, angle, angleOffset, radius);
 
 	}
 
@@ -240,6 +240,10 @@ void transformPoint(std::string& pcb, std::string& module, size_t pcbPos, size_t
 		//newY = y*cosx + x*sinx + centerY;
 		newX = centerX + radius*std::cos(angle);
 		newY = centerY + radius*std::sin(angle);
+		//std::cout << "Angle : " << angle << std::endl;
+		std::cout << "X : " << newX << std::endl;
+		std::cout << "Y : " << newY << std::endl;
+
 
 		std::string tail = "";
 		if(junk[junk.length() - 1] == ')')
